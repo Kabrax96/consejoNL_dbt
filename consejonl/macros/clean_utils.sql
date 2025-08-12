@@ -20,11 +20,14 @@
 {%- endmacro %}
 
 {% macro clean_date(col) -%}
-    -- Intenta varios formatos comunes antes de rendirse
+    /* Robust date parser: tries multiple formats without raising errors */
     coalesce(
       try_to_date(nullif(trim({{ col }}), '')),
-      to_date(nullif(trim({{ col }}), ''), 'YYYY-MM-DD'),
-      to_date(nullif(trim({{ col }}), ''), 'DD/MM/YYYY'),
-      to_date(nullif(trim({{ col }}), ''), 'MM/DD/YYYY')
+      try_to_date(nullif(trim({{ col }}), ''), 'YYYY-MM-DD'),
+      try_to_date(nullif(trim({{ col }}), ''), 'YYYY/MM/DD'),
+      try_to_date(nullif(trim({{ col }}), ''), 'DD/MM/YYYY'),
+      try_to_date(nullif(trim({{ col }}), ''), 'MM/DD/YYYY'),
+      try_to_date(nullif(trim({{ col }}), ''), 'YYYY-MM-DD HH24:MI:SS'),
+      try_to_date(nullif(trim({{ col }}), ''), 'YYYY/MM/DD HH24:MI:SS')
     )
 {%- endmacro %}
