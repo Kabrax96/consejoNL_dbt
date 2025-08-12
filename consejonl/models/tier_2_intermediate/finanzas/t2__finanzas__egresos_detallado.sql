@@ -48,7 +48,7 @@ Alejandro Morales      | 08/08/2025     | consejo_nl_dbt      | Created intermed
 
 with base as (
     select
-        fecha,
+        try_to_date(fecha)            as fecha,
         codigo,
         cuarto,
         pagado,
@@ -64,7 +64,7 @@ with base as (
   from {{ ref('t1__finanzas__egresos_detallado') }}
 
     {% if is_incremental() %}
-        where fecha > (select coalesce(max(fecha), '2000-01-01') from {{ this }})
+        where try_to_date(fecha) > (select coalesce(max(fecha), '2000-01-01') from {{ this }})
     {% endif %}
 )
 
