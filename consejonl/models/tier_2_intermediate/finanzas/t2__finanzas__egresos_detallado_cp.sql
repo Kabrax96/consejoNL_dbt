@@ -27,12 +27,13 @@ Alejandro Morales | 09/24/2025 | consejo_nl_dbt | Created CP version of egresos_
 ===========================================================================================================
 */
 {%- set model_run_start_time_variable = modules.datetime.datetime.now().astimezone(modules.pytz.timezone("America/Mexico_City")) -%}
+
 {{
     config(
         materialized = "table",
         unique_key = ["surrogate_key"],
         on_schema_change = "append_new_columns",
-        merge_exclude_columns = ["create_dttm"],  -- Cambiado de CREATE_DTTM
+        merge_exclude_columns = ["create_dttm"],
         snowflake_warehouse = "COMPUTE_WH",
         tags=['finanzas','egresos_detallado','t2','egresos_detallado_cp'],
         pre_hook = ["SET start_time = TO_TIMESTAMP('2000-01-01'); SET end_time = CURRENT_TIMESTAMP;"],
@@ -55,8 +56,8 @@ with base as (
         modificado,
         subejercicio,
         surrogate_key,
-        "Ampliaciones/Reducciones",  -- Cambiado de "AMPLIACIONES/REDUCCIONES"
-        current_timestamp() as create_dttm  -- Cambiado de CREATE_DTTM
+        "Ampliaciones/Reducciones",
+        current_timestamp() as create_dttm
     from {{ ref('t1__finanzas__egresos_detallado_cp') }}
     {% if is_incremental() %}
         where try_to_date(fecha) > (select coalesce(max(fecha), '2000-01-01') from {{ this }})
