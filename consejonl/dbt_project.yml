@@ -36,27 +36,26 @@ models:
       relation: true
       columns: true
 
+    # Tier 1 (staging) en ODW
     tier_1_staging:
-      +database: "{{ env_var('DBT_ODW_DATABASE') }}"
+      +database: "{{ env_var('DBT_ODW_DATABASE', env_var('SNOWFLAKE_DATABASE')) }}"
       +schema: "staging"
       +materialized: view
 
+    # Tier 2 (intermediate) en ODW
     tier_2_intermediate:
-      +database: "{{ env_var('DBT_ODW_DATABASE') }}"
+      +database: "{{ env_var('DBT_ODW_DATABASE', env_var('SNOWFLAKE_DATABASE')) }}"
       +schema: "intermediate"
       +materialized: table
-      # +table_format: iceberg
-      # +external_volume: "{{ env_var('DBT_TIER2_EV') }}"
 
+    # Tier 3 (marts) en CDW
     tier_3_marts:
-      +database: "{{ env_var('DBT_CDW_DATABASE') }}"
+      +database: "{{ env_var('DBT_CDW_DATABASE', env_var('SNOWFLAKE_DATABASE')) }}"
       +schema: "marts"
       +materialized: table
-      # +table_format: iceberg
-      # +external_volume: "{{ env_var('DBT_TIER3_EV') }}"
-    audit:
-      +database: "{{ env_var('DBT_CDW_DATABASE') }}"
-      +schema: "audit"
-      +materialized: table
-      # +table_format: iceberg
-      # +external_volume: "{{ env_var('DBT_TIER3_EV') }}"
+
+
+# (Opcional) Para que nuestra macro 'generate_schema_name' pueda tomar control
+dispatch:
+  - macro_namespace: dbt
+    search_order: ['consejonl', 'dbt']
