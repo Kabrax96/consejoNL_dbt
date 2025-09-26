@@ -34,7 +34,7 @@ with source as (
         Codigo,
         Concepto,
         Aprobado,
-        "Ampliaciones/Reducciones",
+        "AMPLIACIONES/REDUCCIONES",
         Modificado,
         Devengado,
         Pagado,

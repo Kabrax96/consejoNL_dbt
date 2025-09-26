@@ -8,3 +8,6 @@ sources:
       - name: nuevo_leon_balance_presupuestario
       - name: nuevo_leon_egresos_detallado
       - name: nuevo_leon_ingresos_detallado
+      - name: nuevo_leon_balance_presupuestario_cp
+      - name: nuevo_leon_egresos_detallado_cp
+      - name: nuevo_leon_ingresos_detallado_cp

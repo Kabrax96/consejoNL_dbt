@@ -56,7 +56,7 @@ with base as (
         modificado,
         subejercicio,
         surrogate_key,
-        "Ampliaciones/Reducciones",
+        "AMPLIACIONES/REDUCCIONES",
         current_timestamp() as create_dttm
     from {{ ref('t1__finanzas__egresos_detallado_cp') }}
     {% if is_incremental() %}
